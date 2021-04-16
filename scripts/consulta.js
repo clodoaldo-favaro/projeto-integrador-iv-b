@@ -9,14 +9,11 @@ $(document).ready(
                 type: 'POST',
                 data: {nomeCidade:$('#consulta-cidade').val(), dataConsulta:$('#data-consulta').val(), action:'consultaCidade'},
                 success: function(data) {
-                    console.log(data); // Inspect this in your console
+                    console.log(data); 
                 }
             }).done(function(response) {
                 let jsonData = JSON.parse(response);
-                debugger;
-                console.log(jsonData); 
-                //MONTAR A TELA COM OS RESULTADOS
-                //DÁ PARA USAR A gerarDadosEstatisticos, passando o jsonData como parâmetro
+                mostrarResultado(jsonData);
             }
             );
         } else {
@@ -27,25 +24,70 @@ $(document).ready(
 
 
 function validarDadosInformados() {
-    //res['erros'][1]['mensagem'] = 'Data inválida'
     var res = [];
     var erros = [];
-    var nomeCidade = $('#consulta-cidade').val();
-    var dataConsulta = $('#data-consulta').val();
-    
-    if (!nomeCidade) {
-        erros.push('Cidade não informada.');
-    }
-
-    if (!dataConsulta) {
-        erros.push('Data não informada.');
-    }
-
+    var nomeCidade = $('#consulta-cidade').val().trim();
+    var dataConsulta = $('#data-consulta').val().trim();
+    debugger;
+    erros.concat(validarCidadeInformada(nomeCidade), validarDataInformada(dataConsulta));
     if (erros.length) {
         res['erros'] = erros;
     }
 
     return res;
+}
+
+function validarCidadeInformada(nomeCidade) {
+    erros = [];
+    var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    if (!nomeCidade) {
+        erros.push('Cidade não informada.');
+    }
+
+    if (!isNaN(nomeCidade)) {
+        erros.push('O nome da cidade não pode ser um número.')
+    }
+
+    if (format.test(nomeCidade)) {
+        erros.push('O nome da cidade deve ser alfa-numérico, contendo no máximo hífens.');
+    }
+
+    return erros;
+}
+
+function validarDataInformada(data) {
+    erros = [];
+    debugger;
+    if (!data) {
+        erros.push('Data não informada.');
+        return erros;
+    } 
+    
+    data = data.replaceAll('/','-').split('-');
+
+    data.forEach(arrayValue => {
+        if (isNaN(arrayValue)) {
+            erros.push('Data com formato inválido.')
+            return erros;
+        }
+    });
+
+    let ano = parseInt(data[0].length == 4 ? data[0] : data[2]);
+    let mes = parseInt(data[1]);
+    let dia = parseInt(data[0].length == 2 ? data[0] : data[2]);
+
+    let diasPorMes = [31, anoBissexto(mes) ? 29 : 28 ,31,30,31,30,31,31,30,31,30,31];
+
+    if (dia < 1 || dia > diasPorMes[mes - 1]) {
+        erros.push('Data inválida');
+    }
+    
+    return erros;
+}
+
+function anoBissexto(ano)
+{
+  return ((ano % 4 == 0) && (ano % 100 != 0)) || (ano % 400 == 0);
 }
 
 function mostrarErros(erros) {
@@ -56,7 +98,7 @@ function mostrarErros(erros) {
     alert(msgErro);
 }
 
-function gerarDadosEstaticos() {
+function mostrarResultado(data) {
     var nomeCidade = $('#consulta-cidade').val();
     var bandeira = 'Laranja';
     var casosConfirmados = 3386;
@@ -67,16 +109,6 @@ function gerarDadosEstaticos() {
 
     
     $('.bandeira h3').html(bandeira);
-    
-    var dados = '<div class="nomeCidade"><h2>' + nomeCidade + '</h2></div>' +
-    '<div class="bandeira"><h3>Bandeira ' + bandeira + '</h3></div>' + 
-    '<div class="leftText dados">' +
-    '<p>Casos confirmados: ' + casosConfirmados + '</p>' +
-    '<p>Óbitos: ' + obitos + '</p>' +
-    '<p>Recuperados: ' + recuperados + '</p>' +
-    '<p>Taxa de mortalidade: ' + taxaMortalidade + '%</p>' +
-    '<p>Taxa de recuperados: ' + taxaRecuperados + '%</p>' +
-    '</div>'
     
     if (nomeCidade) {
         $('.nomeCidade h2').text(nomeCidade);

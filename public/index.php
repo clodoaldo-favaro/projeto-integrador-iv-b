@@ -20,18 +20,18 @@
 
     <div class="container body-container">
         <form action="" method="get">
-            <div class="row justify-content-md-center">
+            <div class="row justify-content-center">
                 <input class="d-inline-flex form-control placeholderNormal consultaCidade formPadrao" type="text" id="consulta-cidade" name="consulta-cidade" placeholder="Digite o nome da cidade">
                 <input class="d-inline-flex form-control formPadrao" type="date" name="data-consulta" id="data-consulta" style="display: inline-block;">
             </div>
-            <div class="row justify-content-md-center button-container">
+            <div class="row justify-content-center button-container">
                 <button type="button" id="botao-consulta" class="buttonPadrao formPadrao">CONSULTAR</button>
             </div>
             <div class="row justify-content-md-end">
                 <div class="col-3">
-                    <img src="../images/covid-19-cartoon-icon-by-Vexels.svg" alt="Desenho cartunizado do vírus COVID-19" class="flip-horizontal cartoon-covid">
+                    <img src="../images/covid-19-cartoon-icon-by-Vexels.svg" alt="Desenho cartunizado do vírus COVID-19" class="flip-horizontal cartoon-covid" style="float: right;">
                 </div>
-                <div class="col-6 justify-content-md-center resultado-container">
+                <div class="col-6 justify-content-center resultado-container">
                     <div name="resultado-consulta" id="resultado-consulta" class="form-control resultadoConsulta centerText formPadrao"> 
                         <div class="nomeCidade"><h2></h2></div>
                         <div class="bandeira"><h3></h3></div>  
