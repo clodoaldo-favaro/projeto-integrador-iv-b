@@ -76,7 +76,7 @@ function validarDataInformada(data) {
     let mes = parseInt(data[1]);
     let dia = parseInt(data[0].length == 2 ? data[0] : data[2]);
 
-    let diasPorMes = [31, anoBissexto(mes) ? 29 : 28 ,31,30,31,30,31,31,30,31,30,31];
+    let diasPorMes = [31, anoBissexto(ano) ? 29 : 28 ,31,30,31,30,31,31,30,31,30,31];
 
     if (dia < 1 || dia > diasPorMes[mes - 1]) {
         erros.push('Data inválida');
