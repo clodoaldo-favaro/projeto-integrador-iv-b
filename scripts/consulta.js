@@ -3,17 +3,21 @@ $(document).ready(
         var res = validarDadosInformados();
         
         if (!res['erros']) {
-            //gerarDadosEstaticos();
             $.ajax({
                 url: '../backend/funcoes.php',
                 type: 'POST',
                 data: {nomeCidade:$('#consulta-cidade').val(), dataConsulta:$('#data-consulta').val(), action:'consultaCidade'},
                 success: function(data) {
+                    debugger;
                     console.log(data); 
                 }
             }).done(function(response) {
-                let jsonData = JSON.parse(response);
-                mostrarResultado(jsonData);
+                debugger;
+                if (!response['erros']) {
+                    mostrarResultado(response);
+                } else {
+                    mostrarErros(response['erros']);
+                }
             }
             );
         } else {
@@ -28,8 +32,8 @@ function validarDadosInformados() {
     var erros = [];
     var nomeCidade = $('#consulta-cidade').val().trim();
     var dataConsulta = $('#data-consulta').val().trim();
-    debugger;
-    erros.concat(validarCidadeInformada(nomeCidade), validarDataInformada(dataConsulta));
+    
+    erros = erros.concat(validarCidadeInformada(nomeCidade), validarDataInformada(dataConsulta));
     if (erros.length) {
         res['erros'] = erros;
     }
@@ -57,7 +61,7 @@ function validarCidadeInformada(nomeCidade) {
 
 function validarDataInformada(data) {
     erros = [];
-    debugger;
+    
     if (!data) {
         erros.push('Data não informada.');
         return erros;
@@ -91,34 +95,36 @@ function anoBissexto(ano)
 }
 
 function mostrarErros(erros) {
-    var msgErro = '';
-    erros.forEach(erro => {
-        msgErro += erro + '\n';
+    $('#resultado-erros ul').empty();
+    
+    erros.forEach(msgErro => {
+        $('#resultado-erros ul').append(
+            $('<li>').text(msgErro)
+        )
     });
-    alert(msgErro);
+    
+    $('#resultado-sucesso').hide();
+    $('#resultado-erros').show();
 }
 
 function mostrarResultado(data) {
     var nomeCidade = $('#consulta-cidade').val();
-    var bandeira = 'Laranja';
-    var casosConfirmados = 3386;
-    var obitos = 109;
-    var recuperados = 3112;
+    var bandeira = data['bandeira'];
+    var casosConfirmados = data['casosConfirmados'];
+    var obitos = data['qtdeObitos'];
+    var recuperados = data['qtdeRecuperados'];
     var taxaMortalidade = ((obitos/casosConfirmados)*100).toFixed(2);
     var taxaRecuperados = ((recuperados/casosConfirmados)*100).toFixed(2);
 
-    
     $('.bandeira h3').html(bandeira);
-    
-    if (nomeCidade) {
-        $('.nomeCidade h2').text(nomeCidade);
-        $('.bandeira h3').text(bandeira);
-        $('#casos-confirmados').text('Casos confirmados: ' + casosConfirmados);
-        $('#obitos').text('Óbitos: ' + obitos);
-        $('#recuperados').text('Recuperados: ' + recuperados);
-        $('#taxa-mortalidade').text('Taxa de mortalidade: ' + taxaMortalidade + '%');
-        $('#taxa-recuperados').text('Taxa de recuperados: ' + taxaRecuperados + '%');
-    } else {
-        alert('Informe uma cidade!');
-    }
+    $('.nomeCidade h2').text(nomeCidade);
+    $('.bandeira h3').text(bandeira);
+    $('#casos-confirmados').text('Casos confirmados: ' + casosConfirmados);
+    $('#obitos').text('Óbitos: ' + obitos);
+    $('#recuperados').text('Recuperados: ' + recuperados);
+    $('#taxa-mortalidade').text('Taxa de mortalidade: ' + taxaMortalidade + '%');
+    $('#taxa-recuperados').text('Taxa de recuperados: ' + taxaRecuperados + '%');
+
+    $('#resultado-erros').hide();
+    $('#resultado-sucesso').show();
 }

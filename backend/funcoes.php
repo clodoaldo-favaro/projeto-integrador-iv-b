@@ -14,16 +14,30 @@ function consultaCidade() {
     $nomeCidade = $_POST['nomeCidade'];
     $dataConsulta = $_POST['dataConsulta'];
 
-    $jsonRetorno = '{';
-    
-    //TODO: Consultar banco de dados
-    //Exemplo do formato de retorno em JSON
+    //TODO: Consultar banco de dados e substituir os dados do retorno pelo que veio do campo
+    //Se ocorrerem erros, colocar dentro do jsonRetorno uma chave 'erros' com um array das mensagens de erro,
+    //exemplo: 
+    /*
+        $jsonRetorno = [
+            'erros' = [
+                'Não foi possível conectar com o banco de dados',
+                'Não foram encontradas informações para a cidade informada no período selecionado'
+            ]
+        ]
+    */
 
-    $jsonRetorno .= '"nomeCidade":' .  quoteField($nomeCidade) . ',"dataConsulta":' . quoteField($dataConsulta);
-    $jsonRetorno .= ',"qtdeCasos":' . 1200 . ',"qtdeRecuperados":' . 1180 . ',"qtdeObitos":' . 20;
+    $jsonRetorno = [
+        'nomeCidade' => $nomeCidade,
+        'dataConsulta' => $dataConsulta,
+        'casosConfirmados' => 3386,
+        'qtdeRecuperados' => 3112,
+        'qtdeObitos' => 109,
+        'bandeira' => 'Laranja'
+    ];
         
-    $jsonRetorno .= '}';
-    echo $jsonRetorno;
+    header('Content-Type: application/json');
+    echo json_encode($jsonRetorno);
+    exit;
 }
 
 
