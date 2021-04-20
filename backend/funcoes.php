@@ -1,10 +1,17 @@
 <?php
 
 
+
 if (isset($_POST['action'])) {
     $funcao = $_POST['action'];
     if ($funcao === 'consultaCidade') {
         consultaCidade();
+    } else if ($funcao === 'consultaDezMais') {
+        consultaDezMais();
+    } else if ($funcao === 'consultaBrasil') {
+        consultaBrasil();
+    } else {
+        return ['erros' => ['Função \"' . $funcao .  '\" não encontrada']];
     }
     
 }
@@ -40,10 +47,66 @@ function consultaCidade() {
     exit;
 }
 
+function consultaDezMais() {
+    $dataConsulta = $_POST['dataConsulta'];
+    //TODO implementar a consulta ao banco de dados
+    
 
-function quoteField($field) {
-    return '"' . $field . '"';
+    $cidades = [
+        [
+            'nome' => 'Porto Alegre', 
+            'casos' => 3200, 
+            'recuperados' => 2950, 
+            'mortos' => 100, 
+            'bandeiraAtual' => 'Preta'
+
+        ],
+        [
+            'nome' => 'Caxias do Sul', 
+            'casos' => 2400, 
+            'recuperados' => 2370, 
+            'mortos' => 30, 
+            'bandeiraAtual' => 'Preta'
+
+        ],
+        [
+            'nome' => 'Bento Gonçalves', 
+            'casos' => 1000, 
+            'recuperados' => 990, 
+            'mortos' => 10, 
+            'bandeiraAtual' => 'Preta'
+
+        ], 
+        [
+            'nome' => 'Garibaldi', 
+            'casos' => 500, 
+            'recuperados' => 498, 
+            'mortos' => 2, 
+            'bandeiraAtual' => 'Vermelha'
+
+        ]
+    ];
+
+    header('Content-Type: application/json');
+    echo json_encode($cidades);
+    exit;
 }
+
+function consultaBrasil() {
+    //TODO implementar a consulta ao banco de dados
+    
+    $res = [
+        'casos' => 13900000,
+        'recuperados' => 12300000,
+        'mortos' => 373000
+    ];
+    
+    header('Content-Type: application/json');
+    echo json_encode($res);
+    exit;
+}
+
+
 
 
 

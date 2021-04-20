@@ -14,6 +14,34 @@ $(document).ready(
             }).done(function(response) {
                 debugger;
                 if (!response['erros']) {
+                    montarResultadoConsultaCidade(response);
+                    mostrarResultado();
+                } else {
+                    mostrarErros(response['erros']);
+                }
+            }
+            );
+        } else {
+            mostrarErros(res['erros']);
+        }
+    }), 
+
+    $('#botao-consulta-10-mais').on('click', function() {
+        var res = validarDataInformada($('#data-consulta').val().trim());
+        debugger;
+        if (!res['erros'].length) {
+            $.ajax({
+                url: '../backend/funcoes.php',
+                type: 'POST',
+                data: {nomeCidade:$('#consulta-cidade').val(), dataConsulta:$('#data-consulta').val(), action:'consultaDezMais'},
+                success: function(data) {
+                    debugger;
+                    console.log(data); 
+                }
+            }).done(function(response) {
+                debugger;
+                if (!response['erros']) {
+                    montarResultadoDezMais(response);
                     mostrarResultado(response);
                 } else {
                     mostrarErros(response['erros']);
@@ -23,6 +51,28 @@ $(document).ready(
         } else {
             mostrarErros(res['erros']);
         }
+    }),
+
+    $('#botao-consulta-brasil').on('click', function() {
+        $.ajax({
+            url: '../backend/funcoes.php',
+            type: 'POST',
+            data: {nomeCidade:$('#consulta-cidade').val(), dataConsulta:$('#data-consulta').val(), action:'consultaBrasil'},
+            success: function(data) {
+                debugger;
+                console.log(data); 
+            }
+        }).done(function(response) {
+            debugger;
+            if (!response['erros']) {
+                montarResultadoBrasil(response);
+                mostrarResultado(response);
+            } else {
+                mostrarErros(response['erros']);
+            }
+        }
+        );
+         
     })
 );
 
@@ -33,7 +83,7 @@ function validarDadosInformados() {
     var nomeCidade = $('#consulta-cidade').val().trim();
     var dataConsulta = $('#data-consulta').val().trim();
     
-    erros = erros.concat(validarCidadeInformada(nomeCidade), validarDataInformada(dataConsulta));
+    erros = erros.concat(validarCidadeInformada(nomeCidade)['erros'], validarDataInformada(dataConsulta)['erros']);
     if (erros.length) {
         res['erros'] = erros;
     }
@@ -42,38 +92,39 @@ function validarDadosInformados() {
 }
 
 function validarCidadeInformada(nomeCidade) {
-    erros = [];
+    var res = {'erros': []};
     var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     if (!nomeCidade) {
-        erros.push('Cidade não informada.');
-        return erros;
+        res['erros'].push('Cidade não informada.');
+        return res;
     }
 
     if (!isNaN(nomeCidade)) {
-        erros.push('O nome da cidade não pode ser um número.')
+        res['erros'].push('O nome da cidade não pode ser um número.')
     }
 
     if (format.test(nomeCidade)) {
-        erros.push('O nome da cidade deve ser alfa-numérico, contendo no máximo hífens.');
+        res['erros'].push('O nome da cidade deve ser alfa-numérico, contendo no máximo hífens.');
     }
 
-    return erros;
+    return res;
 }
 
 function validarDataInformada(data) {
-    erros = [];
+    debugger;
+    var res = {'erros': []};
     
     if (!data) {
-        erros.push('Data não informada.');
-        return erros;
+        res['erros'].push('Data não informada.');
+        return res;
     } 
     
     data = data.replaceAll('/','-').split('-');
 
     data.forEach(arrayValue => {
         if (isNaN(arrayValue)) {
-            erros.push('Data com formato inválido.')
-            return erros;
+            res['erros'].push('Data com formato inválido.')
+            return res;
         }
     });
 
@@ -84,10 +135,10 @@ function validarDataInformada(data) {
     let diasPorMes = [31, anoBissexto(ano) ? 29 : 28 ,31,30,31,30,31,31,30,31,30,31];
 
     if (dia < 1 || dia > diasPorMes[mes - 1]) {
-        erros.push('Data inválida');
+        res['erros'].push('Data inválida');
     }
     
-    return erros;
+    return res;
 }
 
 function anoBissexto(ano)
@@ -108,24 +159,84 @@ function mostrarErros(erros) {
     $('#resultado-erros').show();
 }
 
-function mostrarResultado(data) {
+function montarResultadoConsultaCidade(data) {
     var nomeCidade = $('#consulta-cidade').val();
     var bandeira = data['bandeira'];
-    var casosConfirmados = data['casosConfirmados'];
+    var casos = data['casosConfirmados'];
     var obitos = data['qtdeObitos'];
     var recuperados = data['qtdeRecuperados'];
-    var taxaMortalidade = ((obitos/casosConfirmados)*100).toFixed(2);
-    var taxaRecuperados = ((recuperados/casosConfirmados)*100).toFixed(2);
+    var taxaMortalidade = ((obitos/casos)*100).toFixed(2);
+    var taxaRecuperacao = ((recuperados/casos)*100).toFixed(2);
+    
+    $('#resultado-sucesso').empty();
+    $('#resultado-sucesso').append(
+        $('<h2>', {'class': 'nomeCidade', 'text': nomeCidade}),
+        $('<h3>', {'class': 'bandeira', 'text': bandeira}),
+        $('<ul>').append(
+            $('<li>', {'text': 'Casos: ' + casos}),
+            $('<li>', {'text': 'Óbitos: ' + obitos}),
+            $('<li>', {'text': 'Recuperados: ' + recuperados}),
+            $('<li>', {'text': 'Taxa de mortalidade: ' + taxaMortalidade + '%'}),
+            $('<li>', {'text': 'Taxa de recuperação: ' + taxaRecuperacao + '%'})
+        )
+    );
 
-    $('.bandeira h3').html(bandeira);
-    $('.nomeCidade h2').text(nomeCidade);
-    $('.bandeira h3').text(bandeira);
-    $('#casos-confirmados').text('Casos confirmados: ' + casosConfirmados);
-    $('#obitos').text('Óbitos: ' + obitos);
-    $('#recuperados').text('Recuperados: ' + recuperados);
-    $('#taxa-mortalidade').text('Taxa de mortalidade: ' + taxaMortalidade + '%');
-    $('#taxa-recuperados').text('Taxa de recuperados: ' + taxaRecuperados + '%');
+}
 
+function montarResultadoDezMais(data) {
+    debugger;
+    var listaCidadesObj = [];
+    var tableCidades = $('<table>', {'class':'table-10 leftText'}).append(
+        $('<thead>').append(
+            $('<tr>').append(
+                $('<th>', {'text':'Cidade'}),
+                $('<th>', {'text':'Casos'})
+            )
+        )
+    )
+    var tableBody = $('<tbody>');
+
+    $.each(data, function(index, cidade) {
+        debugger;
+        listaCidadesObj.push(
+            $('<tr>').append(
+                $('<td>', {'text': cidade['nome']}),
+                $('<td>', {'text': cidade['casos']})
+            )
+        );
+    });
+
+    $('#resultado-sucesso').append(
+        tableCidades.append(
+            tableBody.append(
+                listaCidadesObj
+            )
+        )
+    );
+}
+
+function montarResultadoBrasil(data) {
+    debugger;
+    var casos = data['casos'];
+    var mortos = data['mortos'];
+    var recuperados = data['recuperados'];
+
+    var taxaMortalidade = ((mortos/casos)*100).toFixed(2);
+    var taxaRecuperacao = ((recuperados/casos)*100).toFixed(2);
+    
+    $('#resultado-sucesso').append(
+        $('<h2>', {'text': 'Dados do COVID no Brasil'}),
+        $('<ul>').append(
+            $('<li>', {'text': 'Casos: ' + casos}),
+            $('<li>', {'text': 'Mortos: ' + mortos}),
+            $('<li>', {'text': 'Recuperados: ' + recuperados}),
+            $('<li>', {'text': 'Taxa de mortalidade: ' + taxaMortalidade + '%'}),
+            $('<li>', {'text': 'Taxa de recuperação: ' + taxaRecuperacao + '%'})
+        )
+    );
+}
+
+function mostrarResultado() {
     $('#resultado-erros').hide();
     $('#resultado-sucesso').show();
 }

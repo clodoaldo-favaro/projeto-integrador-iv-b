@@ -175,7 +175,22 @@ button.altoContraste:hover {
 	border: 2px solid #17252A;
 	border-radius: 2px;
 	min-height: 300px;
-	max-height: 600px;
+	height: 600px;
+}
+
+.table-10 {
+	margin: 0 auto;
+}
+
+table.table-10, .table-10 td, .table-10 th {
+	border: 1px solid black;
+}
+
+.table-10 td {
+	padding: 8px;
+}
+.table-10 th {
+	font-weight: bold;
 }
 
 .centerText {
@@ -214,6 +229,10 @@ button.altoContraste:hover {
 	color: #17252A;
 	border: 2px solid #17252A;
 	border-radius: 2px;
+}
+
+#resultado-sucesso h2 {
+	font-size: 2rem;
 }
 
 .nomeCidade {

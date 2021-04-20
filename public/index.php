@@ -36,15 +36,7 @@
                 <div class="col-6 justify-content-center resultado-container">
                     <div name="resultado-consulta" id="resultado-consulta" class="form-control resultadoConsulta centerText formPadrao"> 
                         <div id="resultado-sucesso">
-                            <div class="nomeCidade"><h2></h2></div>
-                            <div class="bandeira"><h3></h3></div>  
-                            <div class="leftText dados">
-                                <p id="casos-confirmados"></p>
-                                <p id="obitos"></p>
-                                <p id="recuperados"></p>
-                                <p id="taxa-mortalidade"></p>
-                                <p id="taxa-recuperados"></p>
-                            </div>
+                            
                         </div>
                         <div id="resultado-erros" style="display: none;">
                             <h2 class="bold">Não foi possível realizar a consulta</h2>
