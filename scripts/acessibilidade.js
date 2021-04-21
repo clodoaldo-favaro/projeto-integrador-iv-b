@@ -16,7 +16,7 @@ $(document).ready(function() {
 
     function smallerFont() {
         var currentFontSize = parseInt($('html').css('font-size'));
-        if (currentFontSize < 16) {
+        if (currentFontSize > 8) {
             $('html').css('font-size', currentFontSize - 1);
         }
         return false;

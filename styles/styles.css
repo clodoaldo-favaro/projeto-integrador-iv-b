@@ -42,11 +42,14 @@ input:-webkit-autofill.altoContraste {
     -webkit-text-fill-color: #FFF;
 }
 
+input, button {
+	font-size: var(--font-size--default) !important;
+}
+
 .formPadrao, .formPadrao:focus, .formPadrao::selection {
 	background-color: var(--green-light);
 	color: var(--green-dark);
 	border: 2px solid var(--green-dark);
-	font-size: var(--font-size--default);
 }
 
 #barra-auxiliar {

@@ -94,10 +94,10 @@ function validarDadosInformados() {
 function validarCidadeInformada(nomeCidade) {
     var res = {'erros': []};
     var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-    if (!nomeCidade) {
-        res['erros'].push('Cidade não informada.');
-        return res;
-    }
+    //if (!nomeCidade) {
+        //res['erros'].push('Cidade não informada.');
+        //return res;
+    //}
 
     if (!isNaN(nomeCidade)) {
         res['erros'].push('O nome da cidade não pode ser um número.')
