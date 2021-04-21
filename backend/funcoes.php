@@ -1,6 +1,19 @@
 <?php
 
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'p_int');
+define('DB_USER', 'root');
+define('DB_PASS', '');
 
+//Habilita as mensagens de error_get_last
+ini_set('display errors', true);
+error_reporting(E_ALL);
+
+// conexão com o BD
+function conecta_bd(){
+	$PDO = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASS);	    
+	return $PDO;
+}
 
 if (isset($_POST['action'])) {
     $funcao = $_POST['action'];
@@ -16,30 +29,35 @@ if (isset($_POST['action'])) {
     
 }
 
-
 function consultaCidade() {
+    //DEBUGGER    
+    //$nomeCidade = 'Portão';
+    //$dataConsulta = '2021/01/10';
     $nomeCidade = $_POST['nomeCidade'];
-    $dataConsulta = $_POST['dataConsulta'];
+    $dataConsulta = $_POST['dataConsulta'];    
+       
+    $PDO = conecta_bd();
+    $sql = "SELECT casos, recuperados, mortos, bandeiraAtual 
+            FROM casos as a 
+            WHERE a.idCidade in (SELECT id 
+                                FROM cidades 
+                                WHERE nome = :nomeCidade)
+            and a.data= :dataConsulta";
 
-    //TODO: Consultar banco de dados e substituir os dados do retorno pelo que veio do campo
-    //Se ocorrerem erros, colocar dentro do jsonRetorno uma chave 'erros' com um array das mensagens de erro,
-    //exemplo: 
-    /*
-        $jsonRetorno = [
-            'erros' = [
-                'Não foi possível conectar com o banco de dados',
-                'Não foram encontradas informações para a cidade informada no período selecionado'
-            ]
-        ]
-    */
+    $stmt = $PDO->prepare($sql);
+    $stmt->bindParam(':nomeCidade', $nomeCidade);
+    $stmt->bindParam(':dataConsulta', $dataConsulta);
+    $stmt->execute();
 
+    //Exibe os registros secelionados pela query
+    $registro = $stmt->fetch();
     $jsonRetorno = [
         'nomeCidade' => $nomeCidade,
         'dataConsulta' => $dataConsulta,
-        'casosConfirmados' => 3386,
-        'qtdeRecuperados' => 3112,
-        'qtdeObitos' => 109,
-        'bandeira' => 'Laranja'
+        'casosConfirmados' => (int)$registro["casos"],
+        'qtdeRecuperados' => (int)$registro["recuperados"],
+        'qtdeObitos' => (int)$registro["mortos"],
+        'bandeira' => $registro["bandeiraAtual"]
     ];
         
     header('Content-Type: application/json');
@@ -47,45 +65,36 @@ function consultaCidade() {
     exit;
 }
 
-function consultaDezMais() {
-    $dataConsulta = $_POST['dataConsulta'];
-    //TODO implementar a consulta ao banco de dados
-    
+function consultaDezMais() {       
+   //DEBUGGER    
+   //$dataConsulta = '2021/01/10';
+   $dataConsulta = $_POST['dataConsulta'];
+      
+   $PDO = conecta_bd();
+   $sql = "SELECT DISTINCT(casos) casos, recuperados, mortos, bandeiraAtual, 
+	            (SELECT c.nome 
+                  FROM cidades c 
+                  WHERE c.id = a.idCidade) cidade
+            FROM casos a
+            WHERE data=:dataConsulta 
+            ORDER BY a.casos DESC
+            LIMIT 10";
 
-    $cidades = [
-        [
-            'nome' => 'Porto Alegre', 
-            'casos' => 3200, 
-            'recuperados' => 2950, 
-            'mortos' => 100, 
-            'bandeiraAtual' => 'Preta'
+    $stmt = $PDO->prepare($sql);
+    $stmt->bindParam(':dataConsulta', $dataConsulta);
+    $stmt->execute();
+    $cidades=array();
 
-        ],
-        [
-            'nome' => 'Caxias do Sul', 
-            'casos' => 2400, 
-            'recuperados' => 2370, 
-            'mortos' => 30, 
-            'bandeiraAtual' => 'Preta'
-
-        ],
-        [
-            'nome' => 'Bento Gonçalves', 
-            'casos' => 1000, 
-            'recuperados' => 990, 
-            'mortos' => 10, 
-            'bandeiraAtual' => 'Preta'
-
-        ], 
-        [
-            'nome' => 'Garibaldi', 
-            'casos' => 500, 
-            'recuperados' => 498, 
-            'mortos' => 2, 
-            'bandeiraAtual' => 'Vermelha'
-
-        ]
-    ];
+    while ($resultado = $stmt->fetch (PDO::FETCH_ASSOC)):
+        $cidades []= 
+            [
+            'nome' => $resultado['cidade'], 
+            'casos' => (int)$resultado['casos'], 
+            'recuperados' => (int)$resultado['recuperados'], 
+            'mortos' => (int)$resultado['mortos'], 
+            'bandeiraAtual' => $resultado['bandeiraAtual']
+            ];
+    endwhile; 
 
     header('Content-Type: application/json');
     echo json_encode($cidades);
@@ -105,9 +114,4 @@ function consultaBrasil() {
     echo json_encode($res);
     exit;
 }
-
-
-
-
-
 ?>
