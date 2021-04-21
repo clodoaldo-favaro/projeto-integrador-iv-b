@@ -1,32 +1,22 @@
 $(document).ready(function() {
-    var normalH1 = $('h1').css('font-size');
-    var normalH2 = $('h2').css('font-size');
-    var normalInput = $('input[type="text"], input[type="email"]').css('font-size');
-
+    var defaultFontSize  =$('html').css('font-size');
+    
     function normalFont() {
-        $('input[type="text"], input[type="email"], textarea').css('font-size', normalInput);
+        $('html').css({'font-size': defaultFontSize});
     }
 
     function biggerFont() {
-        var fontH1 = parseInt($('h1').css('font-size'));
-        var fontH2 = parseInt($('h2').css('font-size'));
-        var fontInput = parseInt($('input[type="text"], input[type="email"]').css('font-size'));
-        if (fontInput < 22) {
-            $('h1').css('font-size', fontH1 * 1.2);
-            $('h2').css('font-size', fontH2 * 1.2);
-            $('input[type="text"], input[type="email"], textarea').css('font-size', fontInput * 1.2);
+        var currentFontSize = parseInt($('html').css('font-size'));
+        if (currentFontSize < 16) {
+            $('html').css('font-size', currentFontSize + 1);
         }
         return false;
     }
 
     function smallerFont() {
-        var fontH1 = parseInt($('h1').css('font-size'));
-        var fontH2 = parseInt($('h2').css('font-size'));
-        var fontInput = parseInt($('input[type="text"], input[type="email"], textarea').css('font-size'));
-        if (fontInput > 12) {
-            $('h1').css('font-size', fontH1 * 0.8);
-            $('h2').css('font-size', fontH2 * 0.8);
-            $('input[type="text"], input[type="email"], textarea').css('font-size', fontInput * 0.8);
+        var currentFontSize = parseInt($('html').css('font-size'));
+        if (currentFontSize < 16) {
+            $('html').css('font-size', currentFontSize - 1);
         }
         return false;
     }

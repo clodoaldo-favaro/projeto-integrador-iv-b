@@ -1,48 +1,26 @@
 $(document).ready(function() {
-    var selectorTexto = '';
+    var defaultFontSize  =$('html').css('font-size');
     
-    debugger;
-    var normalP = $('p').css('font-size');
-    var normalH1 = $('h1').css('font-size');
-    var normalH2 = $('h2').css('font-size');
-    var normalLi = $('.container-sobre li').css('font-size');
-    
-    $(".normal").click(function() {
-        $('p').css('font-size', normalP);
-        $('h1').css('font-size', normalH1);
-        $('h2').css('font-size', normalH2);
-        $('.container-sobre li').css('font-size', normalLi);
-        
-    });
-  
-    $(".aumentar").click(function() {
-        var fontP = parseInt($('p').css('font-size'));
-        var fontH1 = parseInt($('h1').css('font-size'));
-        var fontH2 = parseInt($('h2').css('font-size'));
-        var fontLi = parseInt($('li').css('font-size'));
-        if (fontP < 22) {
-            $('p').css('font-size', fontP * 1.2);
-            $('h1').css('font-size', fontH1 * 1.2);
-            $('h2').css('font-size', fontH2 * 1.2);
-            $('.container-sobre li').css('font-size', fontLi * 1.2);
+    function normalFont() {
+        $('html').css({'font-size': defaultFontSize});
+    }
+
+    function biggerFont() {
+        var currentFontSize = parseInt($('html').css('font-size'));
+        if (currentFontSize < 16) {
+            $('html').css('font-size', currentFontSize + 1);
         }
         return false;
-    });
-  
-    
-    $(".diminuir").click(function() {
-        var fontP = parseInt($('p').css('font-size'));
-        var fontH1 = parseInt($('h1').css('font-size'));
-        var fontH2 = parseInt($('h2').css('font-size'));
-        var fontLi = parseInt($('.container-sobre li').css('font-size'));
-        if (fontP < 22) {
-            $('p').css('font-size', fontP * 0.8);
-            $('h1').css('font-size', fontH1 * 0.8);
-            $('h2').css('font-size', fontH2 * 0.8);
-            $('.container-sobre li').css('font-size', fontLi * 0.8);
+    }
+
+    function smallerFont() {
+        var currentFontSize = parseInt($('html').css('font-size'));
+        if (currentFontSize < 16) {
+            $('html').css('font-size', currentFontSize - 1);
         }
         return false;
-    });
+    }
+    
 
     $(".alto-contraste").click(function() {
         var color = $('body').css('background-color');

@@ -1,6 +1,6 @@
 var header_content = `
 <div id="barra-auxiliar" class="container-fluid fixed-top backgroundVerde">
-<div class="d-flex justify-content-end acessibilidade">
+<div id="barra-acessibilidade" class="d-flex justify-content-end">
     <ul class="list-group list-group-horizontal bg-transparent">
         <li class="idiminuir list-group-item bg-transparent border-0">
             <a class="diminuir" href="#" accesskey="6" title="Diminuir fonte">Diminuir fonte [6]</a>

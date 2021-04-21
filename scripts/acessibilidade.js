@@ -1,43 +1,27 @@
 $(document).ready(function() {
-    var selectorNomeCidade = '.nomeCidade h2';
-    var selectorBandeira = '.bandeira h3';
-    var selectorDados = '.dados p';
-    var selectorBrand = '#consulta-covid';
-    var selectorPages = '.pages a';
-    
-    var normalNomeCidade = $(selectorNomeCidade).css('font-size');
-    var normalBandeira = $(selectorBandeira).css('font-size');
-    var normalDados = $(selectorDados).css('font-size');
-    var normalBrand = $(selectorBrand).css('font-size');
-    var normalPages = $(selectorPages).css('font-size');
 
+    var defaultFontSize  =$('html').css('font-size');
+    
     function normalFont() {
-        $(selectorNomeCidade).css('font-size', normalNomeCidade);
-        $(selectorBandeira).css('font-size', normalBandeira);
-        $(selectorDados).css('font-size', normalDados);
-        $(selectorBrand).css('font-size', normalBrand);
-        $(selectorPages).css('font-size', normalPages);
+        $('html').css({'font-size': defaultFontSize});
     }
 
     function biggerFont() {
-        var fontP = parseInt($(selectorDados).css('font-size'));
-        var fontCidade = parseInt($(selectorNomeCidade).css('font-size'));
-        if (fontP < 22) {
-            $(selectorDados).css('font-size', fontP * 1.2);
-            $(selectorNomeCidade).css('font-size', fontCidade * 1.2);
+        var currentFontSize = parseInt($('html').css('font-size'));
+        if (currentFontSize < 16) {
+            $('html').css('font-size', currentFontSize + 1);
         }
         return false;
     }
 
     function smallerFont() {
-        var fontP = parseInt($(selectorDados).css('font-size'));
-        var fontCidade = parseInt($(selectorNomeCidade).css('font-size'));
-        if (fontP > 10) {
-            $(selectorDados).css('font-size', fontP * 0.8);
-            $(selectorNomeCidade).css('font-size', fontCidade * 0.8);
+        var currentFontSize = parseInt($('html').css('font-size'));
+        if (currentFontSize < 16) {
+            $('html').css('font-size', currentFontSize - 1);
         }
         return false;
     }
+    
 
     function altoContraste() {
         var color = $('body').css('background-color');

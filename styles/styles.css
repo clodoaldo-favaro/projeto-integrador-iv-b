@@ -1,5 +1,17 @@
+:root {
+	font-size: 62.5%; /* (62.5/100) * 16px = 10px */
+	--font-size--small: 1.4rem; /* 14px */
+	--font-size--default: 1.6rem; /* 16px */
+	--font-size--large: 2.4rem; /* 24px */
+	--green: #3AAFA9;
+	--green-light: #7AFDCA;
+	--green-dark: #17252A;
+	--green-button: #00FFAA;
+	--green-button-hover: #00FFEE;
+}
+
 body {
-    background-color: #3AAFA9;
+    background-color: var(--green);
 	font-family: 'Roboto', sans-serif;
 }
 
@@ -8,8 +20,8 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
 input:-webkit-autofill:active  {
-    -webkit-box-shadow: 0 0 0 30px #7AFDCA inset;
-	box-shadow: 0 0 0 30px #7AFDCA inset;
+    -webkit-box-shadow: 0 0 0 30px var(--green-light) inset;
+	box-shadow: 0 0 0 30px var(--green-light) inset;
 }
 
 input:-webkit-autofill.altoContraste,
@@ -22,7 +34,7 @@ input:-webkit-autofill:active.altoContraste {
 
 /*Change text in autofill textbox*/
 input:-webkit-autofill {
-    -webkit-text-fill-color: #17252A;
+    -webkit-text-fill-color: var(--green-dark);
 }
 
 /*Change text in autofill textbox*/
@@ -31,9 +43,10 @@ input:-webkit-autofill.altoContraste {
 }
 
 .formPadrao, .formPadrao:focus, .formPadrao::selection {
-	background-color: #7AFDCA;
-	color: #17252A;
-	border: 2px solid #17252A;
+	background-color: var(--green-light);
+	color: var(--green-dark);
+	border: 2px solid var(--green-dark);
+	font-size: var(--font-size--default);
 }
 
 #barra-auxiliar {
@@ -50,28 +63,29 @@ input:-webkit-autofill.altoContraste {
 }
 
 .backgroundVerde {
-	background-color: #3AAFA9;
+	background-color: var(--green);
 }
 
 .navegacao {
     margin-top: 40px;
-    background-color: #17252A;
+    background-color: var(--green-dark);
 	height: 74px;
 	z-index: 2;
 }
 
 .navegacao a {
     color: #FEFFFF;
-    font-size: 1.2rem;
+    font-size: var(--font-size--default);
 }
 
 #consulta-covid {
-    font-size: 1.5rem;
+    font-size: var(--font-size--large);
 }
 
 
-.acessibilidade a {
-	color: #17252A;
+#barra-acessibilidade a {
+	color: var(--green-dark);
+	font-size: var(--font-size--default);
 }
 
 a.alto-contraste:before {
@@ -138,13 +152,13 @@ a.alto-contraste:before {
 .button-container button {
 	border-radius: 2px;
 	height: 34px;
-	width: 130px;
+	min-width: 130px;
 	font-weight: 600;
 	transition: 0.3s;
 }
 
 .buttonPadrao {
-	background-color: #00FFAA;
+	background-color: var(--green-button);
 }
 
 .buttonPadrao:focus {
@@ -152,7 +166,7 @@ a.alto-contraste:before {
 }
 
 .buttonPadrao:hover {
-	background-color: #00FFEE;
+	background-color: var(--green-button-hover);
 }
 
 .altoContraste, .altoContraste:focus {
@@ -170,9 +184,9 @@ button.altoContraste:hover {
 }
 
 .resultadoConsulta {
-	background-color: #7AFDCA;
-	color: #17252A;
-	border: 2px solid #17252A;
+	background-color: var(--green-light);
+	color: var(--green-dark);
+	border: 2px solid var(--green-dark);
 	border-radius: 2px;
 	min-height: 300px;
 	height: 600px;
@@ -226,8 +240,8 @@ table.table-10, .table-10 td, .table-10 th {
 }
 
 .container-contato-padrao {
-	color: #17252A;
-	border: 2px solid #17252A;
+	color: var(--green-dark);
+	border: 2px solid var(--green-dark);
 	border-radius: 2px;
 }
 

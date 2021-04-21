@@ -56,6 +56,7 @@
     <script src="../bootstrap-4.5.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="../scripts/consulta.js"></script>
     <script src="../scripts/acessibilidade.js"></script>
+    <script src="../scripts/changeFontSize.js"></script>
     <script src="../scripts/header.js"></script>
 </body>
 </html>

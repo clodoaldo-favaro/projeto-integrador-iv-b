@@ -184,7 +184,6 @@ function montarResultadoConsultaCidade(data) {
 }
 
 function montarResultadoDezMais(data) {
-    debugger;
     var listaCidadesObj = [];
     var tableCidades = $('<table>', {'class':'table-10 leftText'}).append(
         $('<thead>').append(
@@ -205,7 +204,8 @@ function montarResultadoDezMais(data) {
             )
         );
     });
-
+    
+    $('#resultado-sucesso').empty();
     $('#resultado-sucesso').append(
         tableCidades.append(
             tableBody.append(
@@ -224,6 +224,7 @@ function montarResultadoBrasil(data) {
     var taxaMortalidade = ((mortos/casos)*100).toFixed(2);
     var taxaRecuperacao = ((recuperados/casos)*100).toFixed(2);
     
+    $('#resultado-sucesso').empty();
     $('#resultado-sucesso').append(
         $('<h2>', {'text': 'Dados do COVID no Brasil'}),
         $('<ul>').append(
